@@ -6,17 +6,11 @@ RUN apk add --no-cache gcc g++ make sqlite-dev
 # Set working directory
 WORKDIR /app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download dependencies
-RUN go mod download
-
 # Copy source code
-COPY backend .
+COPY . .
 
 # Build the application
-RUN go build -o main .
+RUN go build -o nta-backend -mod vendor .
 
 # Create a data directory for the SQLite database
 RUN mkdir -p /app/data
@@ -28,4 +22,4 @@ ENV DB_PATH=/app/data/notetime.db
 EXPOSE 8080
 
 # Command to run the application
-CMD ["./main"]
+CMD ["./nta-backend"]
